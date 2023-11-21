@@ -12,32 +12,40 @@ use WendellAdriel\Lift\Attributes\Cast;
 use WendellAdriel\Lift\Attributes\Fillable;
 use WendellAdriel\Lift\Attributes\Hidden;
 use WendellAdriel\Lift\Attributes\PrimaryKey;
-use WendellAdriel\Lift\Lift;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, Lift;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    #[PrimaryKey]
-    public int $id;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'display_name',
+        'email',
+        'password',
+    ];
 
-    #[Fillable]
-    public string $name;
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
-    #[Fillable]
-    public ?string $display_name;
-
-    #[Fillable]
-    public string $email;
-
-    #[Fillable]
-    #[Hidden]
-    #[Cast('hashed')]
-    public string $password;
-
-    #[Hidden]
-    public string $remember_token;
-
-    #[Cast('datetime')]
-    public ?Carbon $email_verified_at;
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 }
